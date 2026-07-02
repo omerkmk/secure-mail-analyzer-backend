@@ -6,7 +6,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.securemail.analyzer.dto.AuthResponse;
+import com.securemail.analyzer.dto.LoginRequest;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -18,5 +19,11 @@ public class AuthController {
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         authService.register(request);
         return ResponseEntity.status(201).body("Kayıt başarılı");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        AuthResponse response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
 }
