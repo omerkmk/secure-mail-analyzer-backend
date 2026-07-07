@@ -3,6 +3,7 @@ package com.securemail.analyzer.controller;
 import com.securemail.analyzer.dto.AnalysisRequest;
 import com.securemail.analyzer.dto.AnalysisResponse;
 import com.securemail.analyzer.service.AnalysisService;
+import com.securemail.analyzer.service.LinkAnalysisService;
 import com.securemail.analyzer.service.MailAnalysisService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class AnalysisController {
 
     private final MailAnalysisService mailAnalysisService;
+    private final LinkAnalysisService linkAnalysisService;
     private final AnalysisService analysisService;
 
     @PostMapping("/mail")
@@ -28,6 +30,18 @@ public class AnalysisController {
         String userEmail = authentication.getName();
 
         AnalysisResponse response = mailAnalysisService.analyzeMail(request, userEmail);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/link")
+    public ResponseEntity<AnalysisResponse> analyzeLink(
+            @Valid @RequestBody AnalysisRequest request,
+            Authentication authentication
+    ) {
+        String userEmail = authentication.getName();
+
+        AnalysisResponse response = linkAnalysisService.analyzeLink(request, userEmail);
 
         return ResponseEntity.ok(response);
     }
