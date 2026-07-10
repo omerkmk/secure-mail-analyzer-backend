@@ -6,8 +6,10 @@ import com.securemail.analyzer.entity.Analysis;
 import com.securemail.analyzer.entity.RiskFinding;
 import com.securemail.analyzer.repository.AnalysisRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,6 +25,18 @@ public class AnalysisService {
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public AnalysisResponse getAnalysisDetail(Long id, String userEmail) {
+        Analysis analysis = analysisRepository
+                .findByIdAndUser_Email(id, userEmail)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Analiz bulunamadı."
+                ));
+
+        return mapToResponse(analysis);
     }
 
     private AnalysisResponse mapToResponse(Analysis analysis) {

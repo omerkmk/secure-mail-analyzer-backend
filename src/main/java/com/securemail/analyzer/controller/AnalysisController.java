@@ -29,7 +29,8 @@ public class AnalysisController {
     ) {
         String userEmail = authentication.getName();
 
-        AnalysisResponse response = mailAnalysisService.analyzeMail(request, userEmail);
+        AnalysisResponse response =
+                mailAnalysisService.analyzeMail(request, userEmail);
 
         return ResponseEntity.ok(response);
     }
@@ -41,17 +42,34 @@ public class AnalysisController {
     ) {
         String userEmail = authentication.getName();
 
-        AnalysisResponse response = linkAnalysisService.analyzeLink(request, userEmail);
+        AnalysisResponse response =
+                linkAnalysisService.analyzeLink(request, userEmail);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<AnalysisResponse>> getHistory(Authentication authentication) {
+    public ResponseEntity<List<AnalysisResponse>> getHistory(
+            Authentication authentication
+    ) {
         String userEmail = authentication.getName();
 
-        List<AnalysisResponse> history = analysisService.getHistory(userEmail);
+        List<AnalysisResponse> history =
+                analysisService.getHistory(userEmail);
 
         return ResponseEntity.ok(history);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AnalysisResponse> getAnalysisDetail(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        String userEmail = authentication.getName();
+
+        AnalysisResponse response =
+                analysisService.getAnalysisDetail(id, userEmail);
+
+        return ResponseEntity.ok(response);
     }
 }
