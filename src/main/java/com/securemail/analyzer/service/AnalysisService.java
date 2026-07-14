@@ -29,6 +29,7 @@ public class AnalysisService {
 
     @Transactional(readOnly = true)
     public AnalysisResponse getAnalysisDetail(Long id, String userEmail) {
+
         Analysis analysis = analysisRepository
                 .findByIdAndUser_Email(id, userEmail)
                 .orElseThrow(() -> new ResponseStatusException(

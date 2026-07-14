@@ -12,7 +12,9 @@ import com.securemail.analyzer.enums.RiskType;
 import com.securemail.analyzer.repository.AnalysisRepository;
 import com.securemail.analyzer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,10 @@ public class LinkAnalysisService {
 
     public AnalysisResponse analyzeLink(AnalysisRequest request, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı."));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Kullanıcı bulunamadı."
+                ));
 
         String originalInput = request.getInput().trim();
         String input = originalInput.toLowerCase();

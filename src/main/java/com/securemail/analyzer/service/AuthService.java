@@ -1,17 +1,17 @@
 package com.securemail.analyzer.service;
 
 import com.securemail.analyzer.dto.AuthResponse;
+import com.securemail.analyzer.dto.LoginRequest;
 import com.securemail.analyzer.dto.RegisterRequest;
 import com.securemail.analyzer.entity.User;
 import com.securemail.analyzer.enums.Role;
 import com.securemail.analyzer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.securemail.analyzer.dto.AuthResponse;
-import com.securemail.analyzer.dto.LoginRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -22,7 +22,10 @@ public class AuthService {
     public void register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Bu email adresi zaten kayıtlı.");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Bu email adresi zaten kayıtlı."
+            );
         }
 
 
