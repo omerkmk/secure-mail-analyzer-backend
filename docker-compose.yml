@@ -10,6 +10,28 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # Postgres hazır mı diye kontrol (backend erken ayağa kalkmasın)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U securemail -d secure_mail_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: .
+    image: secure-mail-analyzer-backend:local
+    container_name: secure-mail-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Container içinden DB'ye "postgres" host adıyla bağlan
+    # (application.properties'teki localhost'u ezer)
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/secure_mail_db
+      SPRING_DATASOURCE_USERNAME: securemail
+      SPRING_DATASOURCE_PASSWORD: securemail123
+    ports:
+      - "8080:8080"
 
 volumes:
   postgres_data:
