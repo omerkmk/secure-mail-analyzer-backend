@@ -1,0 +1,13 @@
+# Backend Service = API'ye cluster içinden erişim
+# Dışarıdan test için port-forward kullanacağız
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - port: 8080
+      targetPort: 8080

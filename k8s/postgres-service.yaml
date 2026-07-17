@@ -1,0 +1,13 @@
+# Service = pod'lara sabit isim/adres verir
+# Backend, jdbc URL'de "postgres" host adını kullanacak
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
